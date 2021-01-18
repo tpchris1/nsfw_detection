@@ -1,0 +1,42 @@
+version: '3'
+services:
+
+    db:
+      container_name: postgres-batalk
+      image: postgres
+      environment:
+        POSTGRES_PASSWORD: batalk!@#QWE123qwe
+      ports:
+        - "5432:5432"
+      volumes:
+        - pgdata:/var/lib/postgresql/data/
+
+    nginx:
+        container_name: nginx-batalk
+        build: ./nginx
+        restart: always
+        ports:
+        - "80:80" 
+        volumes:
+        - ./api:/docker_api
+        - ./log:/var/log/nginx
+        depends_on:
+        - api
+        
+    api:
+        build: ./api
+        environment:
+          - PYTHONIOENCODING=utf-8
+        restart: always
+        command:  bash -c "python manage.py collectstatic --noinput && 
+                                        uwsgi --ini uwsgi.ini"
+        ports:
+        - "8002"
+        volumes:
+        - ./api:/docker_api
+        depends_on:
+        - db
+
+volumes:
+    pgdata:
+

@@ -1,0 +1,14 @@
+django<2.0
+djangorestframework
+jieba
+Pillow
+psycopg2-binary
+uwsgi
+# cloudinary api
+cloudinary
+# sightengine api
+sightengine
+requests
+# tensorflow
+tensorflow
+scikit-image
