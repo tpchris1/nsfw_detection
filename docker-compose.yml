@@ -1,42 +1,132 @@
-version: '3'
+version: "3.7"
 services:
 
-    db:
-      container_name: postgres-batalk
-      image: postgres
-      environment:
-        POSTGRES_PASSWORD: batalk!@#QWE123qwe
-      ports:
-        - "5432:5432"
-      volumes:
-        - pgdata:/var/lib/postgresql/data/
+  api1:
+    container_name: api1_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 1
+        CONTAINER_WORKDIR: "docker_nsfw1/" 
+    volumes:
+      - api1-volume:/docker_nsfw1
+      - ./api1_container:/docker_nsfw1/media/
 
-    nginx:
-        container_name: nginx-batalk
-        build: ./nginx
-        restart: always
-        ports:
-        - "80:80" 
-        volumes:
-        - ./api:/docker_api
-        - ./log:/var/log/nginx
-        depends_on:
-        - api
-        
-    api:
-        build: ./api
-        environment:
-          - PYTHONIOENCODING=utf-8
-        restart: always
-        command:  bash -c "python manage.py collectstatic --noinput && 
-                                        uwsgi --ini uwsgi.ini"
-        ports:
-        - "8002"
-        volumes:
-        - ./api:/docker_api
-        depends_on:
-        - db
+  api2:
+    container_name: api2_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 2
+        CONTAINER_WORKDIR: "docker_nsfw2/" 
+    volumes:
+      - api2-volume:/docker_nsfw2
+      - ./api2_container:/docker_nsfw2/media/
+
+  api3:
+    container_name: api3_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 3
+        CONTAINER_WORKDIR: "docker_nsfw3/" 
+    volumes:
+      - api3-volume:/docker_nsfw3
+      - ./api3_container:/docker_nsfw3/media/
+
+  api4:
+    container_name: api4_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 4
+        CONTAINER_WORKDIR: "docker_nsfw4/" 
+    volumes:
+      - api4-volume:/docker_nsfw4
+      - ./api4_container:/docker_nsfw4/media/
+
+  api5:
+    container_name: api5_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 5
+        CONTAINER_WORKDIR: "docker_nsfw5/" 
+    volumes:
+      - api5-volume:/docker_nsfw5
+      - ./api5_container:/docker_nsfw5/media/
+
+  api6:
+    container_name: api6_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 6
+        CONTAINER_WORKDIR: "docker_nsfw6/" 
+    volumes:
+      - api6-volume:/docker_nsfw6
+      - ./api6_container:/docker_nsfw6/media/
+
+  api7:
+    container_name: api7_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 7
+        CONTAINER_WORKDIR: "docker_nsfw7/" 
+    volumes:
+      - api7-volume:/docker_nsfw7
+      - ./api7_container:/docker_nsfw7/media/
+
+  api8:
+    container_name: api8_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 8
+        CONTAINER_WORKDIR: "docker_nsfw8/" 
+    volumes:
+      - api8-volume:/docker_nsfw8
+      - ./api8_container:/docker_nsfw8/media/
+
+  nginx:
+    container_name: nginx-container
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - api1-volume:/etc/nginx/api1_volume/
+      - ./api1_container:/etc/nginx/api1_volume/media/
+      - api2-volume:/etc/nginx/api2_volume/
+      - ./api2_container:/etc/nginx/api2_volume/media/
+      - api3-volume:/etc/nginx/api3_volume/
+      - ./api3_container:/etc/nginx/api3_volume/media/
+      - api4-volume:/etc/nginx/api4_volume/
+      - ./api4_container:/etc/nginx/api4_volume/media/
+      - api5-volume:/etc/nginx/api5_volume/
+      - ./api5_container:/etc/nginx/api5_volume/media/
+      - api6-volume:/etc/nginx/api6_volume/
+      - ./api6_container:/etc/nginx/api6_volume/media/
+      - api7-volume:/etc/nginx/api7_volume/
+      - ./api7_container:/etc/nginx/api7_volume/media/
+      - api8-volume:/etc/nginx/api8_volume/
+      - ./api8_container:/etc/nginx/api8_volume/media/
 
 volumes:
-    pgdata:
-
+  api1-volume:
+  api2-volume:
+  api3-volume:
+  api4-volume:
+  api5-volume:
+  api6-volume:
+  api7-volume:
+  api8-volume:

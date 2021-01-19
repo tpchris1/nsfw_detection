@@ -1,0 +1,75 @@
+version: "3.7"
+services:
+
+  api1:
+    container_name: api1_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 1
+        CONTAINER_WORKDIR: "docker_nsfw1/"
+    volumes:
+        - api1-volume:/docker_nsfw1
+        - ./api1_container:/docker_nsfw1/media/
+
+  api2:
+    container_name: api2_container
+    restart: always
+    build:
+      context: ./api
+      args:
+        CONTAINER_INDEX: 2
+        CONTAINER_WORKDIR: "docker_nsfw2/"
+    volumes:
+        - api2-volume:/docker_nsfw2
+        - ./api2_container:/docker_nsfw2/media/
+
+  nginx:
+    container_name: nginx-container
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - api1-volume:/etc/nginx/api1_volume/
+      - ./api1_container:/etc/nginx/api1_volume/media/
+      - api2-volume:/etc/nginx/api2_volume
+      - ./api2_container:/etc/nginx/api2_volume/media/
+
+      
+volumes:
+  api1-volume:
+  api2-volume:
+  
+  
+  
+  # old version
+  # api1:
+  #   container_name: api_container_1
+  #   build: ./api
+  #   # ports:
+  #   #   - "80:8000"
+  #   # command: uwsgi --ini uwsgi.ini 
+  #   volumes:
+  #       - api-volume:/docker_nsfw/api1
+  #       - ./api_container_1:/docker_nsfw/api1/media/
+  #       # - ./api:/docker_nsfw
+  #       # - "./api_container_1/nsfw_detection.sock:/docker_nsfw/nsfw_detection.sock"
+  #       # - ./api_container_1:/docker_nsfw/nsfw_detection.sock 
+  #       # - ./api_container_1:/docker_nsfw/db.splite3 
+    # nginx:
+    # container_name: nginx-container
+    # build: ./nginx
+    # ports:
+    #   - "80:80"
+    # # depends_on:
+    # #   - api
+    # # links:
+    # #   - api1
+    # volumes:
+    #   - api1-volume:/etc/nginx/api1_volume
+
+    #   # - type: volume
+    #   #   source: 
+    #   #   target: /data
